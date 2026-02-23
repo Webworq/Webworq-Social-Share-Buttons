@@ -83,8 +83,8 @@ class Ripple_Frontend {
         ?>
         <script>
         (function(){
-            var html = <?php echo $buttons_json; ?>;
-            var placement = <?php echo $placement_json; ?>;
+            var html = <?php echo $buttons_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output of wp_json_encode() ?>;
+            var placement = <?php echo $placement_json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output of wp_json_encode() ?>;
 
             /* Content container selectors — ordered by specificity.
                Covers: Standard WP, Divi, Elementor, Bricks, Beaver Builder,
@@ -178,7 +178,7 @@ class Ripple_Frontend {
         if ( ! $this->should_display_floating() ) return;
 
         $this->floating_rendered = true;
-        echo $this->render_buttons( array( 'mode' => 'floating' ) );
+        echo wp_kses_post( $this->render_buttons( array( 'mode' => 'floating' ) ) );
     }
 
     /**
@@ -248,10 +248,11 @@ class Ripple_Frontend {
             $html .= ' style="' . esc_attr( $style_attr ) . '"';
         }
 
+        /* translators: %s: platform name */
         $label_text = $is_copy ? $platform['label'] : sprintf( __( 'Share on %s', 'ripple-social-share' ), $platform['label'] );
         $html .= ' title="' . esc_attr( $label_text ) . '"';
         $html .= ' aria-label="' . esc_attr( $label_text ) . '">';
-        $html .= '<span class="ripple-icon">' . $platform['icon'] . '</span>';
+        $html .= '<span class="ripple-icon">' . wp_kses_post( $platform['icon'] ) . '</span>';
 
         if ( $show_labels ) {
             $html .= '<span class="ripple-label">' . esc_html( $platform['label'] ) . '</span>';
@@ -309,7 +310,7 @@ class Ripple_Frontend {
             <?php endif; ?>
             <div class="ripple-buttons-wrap">
                 <?php foreach ( $platforms as $slug => $platform ) {
-                    echo $this->render_single_button( $slug, $platform, $post_id, $color_preset, $show_labels );
+                    echo wp_kses_post( $this->render_single_button( $slug, $platform, $post_id, $color_preset, $show_labels ) );
                 } ?>
             </div>
         </div>
@@ -342,7 +343,7 @@ class Ripple_Frontend {
             <div class="ripple-collapsible-panel" aria-hidden="true">
                 <div class="ripple-buttons-wrap">
                     <?php foreach ( $platforms as $slug => $platform ) {
-                        echo $this->render_single_button( $slug, $platform, $post_id, $color_preset, true );
+                        echo wp_kses_post( $this->render_single_button( $slug, $platform, $post_id, $color_preset, true ) );
                     } ?>
                 </div>
             </div>
@@ -384,6 +385,7 @@ class Ripple_Frontend {
                     }
                     $style_attr .= '--ripple-fab-index:' . $i . ';';
 
+                    /* translators: %s: platform name */
                     $label = $is_copy ? $platform['label'] : sprintf( __( 'Share on %s', 'ripple-social-share' ), $platform['label'] );
                     ?>
                     <a class="ripple-fab-option ripple-btn-<?php echo esc_attr( $slug ); ?>"
@@ -393,7 +395,7 @@ class Ripple_Frontend {
                        style="<?php echo esc_attr( $style_attr ); ?>"
                        title="<?php echo esc_attr( $label ); ?>"
                        aria-label="<?php echo esc_attr( $label ); ?>">
-                        <span class="ripple-icon"><?php echo $platform['icon']; ?></span>
+                        <span class="ripple-icon"><?php echo wp_kses_post( $platform['icon'] ); ?></span>
                         <span class="ripple-fab-tooltip"><?php echo esc_html( $platform['label'] ); ?></span>
                     </a>
                     <?php

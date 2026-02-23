@@ -1,9 +1,9 @@
 === Ripple — Smart Social Share Buttons ===
 Contributors: webworq
-Tags: social sharing, share buttons, open graph, twitter card, linkedin, bluesky, divi
+Tags: social sharing, share buttons, open graph, twitter card, linkedin
 Requires at least: 5.0
-Tested up to: 6.7
-Stable tag: 3.1.0
+Tested up to: 6.9
+Stable tag: 3.1.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -50,6 +50,13 @@ Add custom platforms with the `ripple_platforms` filter. See class-platforms.php
 3. Go to Settings > Ripple to configure
 
 == Changelog ==
+
+= 3.1.1 =
+* Fixed all WordPress Plugin Check (PCP) errors for directory compliance
+* Improved output escaping throughout admin interface (esc_html_e, esc_attr, wp_kses_post)
+* Added translators comments for all placeholder strings
+* Fixed auto-placement for Divi Theme Builder specialty column layouts
+* Updated tested-up-to to WordPress 6.9
 
 = 3.1.0 =
 * Switched to official Automattic social-logos icon set (https://github.com/Automattic/social-logos)

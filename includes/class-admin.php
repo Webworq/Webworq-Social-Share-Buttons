@@ -167,33 +167,34 @@ class Ripple_Admin {
     public function render_page() {
         $settings  = Ripple_Social_Share::get_settings();
         $platforms = Ripple_Platforms::get_all();
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'platforms';
         ?>
         <div class="wrap ripple-wrap">
             <div class="ripple-header">
                 <h1>
                     <span class="ripple-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 560"><g transform="translate(-66, 0)"><path d="M482.028,127.552c68.678-3.438,133.791,20.53,184.477,66.29l305.786,305.871c-11.529,6.257-23.924,11.151-36.506,14.931-89.755,26.968-184.864,3.869-251.798-61.098L385.201,154.676c-.615-2.799,13.565-8.158,16.384-9.324,25.113-10.379,53.294-16.441,80.443-17.8h0Z"/><path d="M562.559,383.751c37.056,37.172,74.009,74.57,110.897,111.928,2.256,2.285,5.104,1.704,4.126,5.766-10.939,3.084-21.029,8.499-31.842,12.036-88.447,28.927-186.958,6.104-253.544-58.195L92.748,155.923l-1.054-4.09c96.742-44.785,204.585-27.196,282.992,43.779,33.721,30.524,64.337,65.524,96.438,97.709,30.263,30.342,61.198,60.099,91.435,90.431h0Z"/><path d="M1040.143,130.723l-1.741,3.51c-47.331,46.61-93.494,94.433-140.972,140.891-22.606,22.121-40.946,45.234-74.833,21.098l-167.233-166.664c23.573-1.811,47.174-.719,70.806-1.133,81.628-1.429,163.864-2.228,245.511,0,22.879.624,45.593.686,68.462,2.297h0Z" fill="#f60"/></g></svg></span>
-                    <?php _e( 'Ripple', 'ripple-social-share' ); ?>
+                    <?php esc_html_e( 'Ripple', 'ripple-social-share' ); ?>
                     <span class="ripple-version">v<?php echo esc_html( RIPPLE_VERSION ); ?></span>
                 </h1>
-                <p class="ripple-tagline"><?php _e( 'Smart Social Share Buttons &amp; Open Graph by Webworq', 'ripple-social-share' ); ?></p>
+                <p class="ripple-tagline"><?php esc_html_e( 'Smart Social Share Buttons &amp; Open Graph by Webworq', 'ripple-social-share' ); ?></p>
             </div>
 
             <nav class="nav-tab-wrapper ripple-tabs">
                 <a href="?page=ripple-social-share&tab=platforms" class="nav-tab <?php echo $active_tab === 'platforms' ? 'nav-tab-active' : ''; ?>">
-                    <?php _e( 'Platforms', 'ripple-social-share' ); ?>
+                    <?php esc_html_e( 'Platforms', 'ripple-social-share' ); ?>
                 </a>
                 <a href="?page=ripple-social-share&tab=styling" class="nav-tab <?php echo $active_tab === 'styling' ? 'nav-tab-active' : ''; ?>">
-                    <?php _e( 'Styling', 'ripple-social-share' ); ?>
+                    <?php esc_html_e( 'Styling', 'ripple-social-share' ); ?>
                 </a>
                 <a href="?page=ripple-social-share&tab=placement" class="nav-tab <?php echo $active_tab === 'placement' ? 'nav-tab-active' : ''; ?>">
-                    <?php _e( 'Placement', 'ripple-social-share' ); ?>
+                    <?php esc_html_e( 'Placement', 'ripple-social-share' ); ?>
                 </a>
                 <a href="?page=ripple-social-share&tab=floating" class="nav-tab <?php echo $active_tab === 'floating' ? 'nav-tab-active' : ''; ?>">
-                    <?php _e( 'Floating', 'ripple-social-share' ); ?>
+                    <?php esc_html_e( 'Floating', 'ripple-social-share' ); ?>
                 </a>
                 <a href="?page=ripple-social-share&tab=metadata" class="nav-tab <?php echo $active_tab === 'metadata' ? 'nav-tab-active' : ''; ?>">
-                    <?php _e( 'Metadata', 'ripple-social-share' ); ?>
+                    <?php esc_html_e( 'Metadata', 'ripple-social-share' ); ?>
                 </a>
             </nav>
 
@@ -202,8 +203,8 @@ class Ripple_Admin {
 
                 <?php if ( $active_tab === 'platforms' ) : ?>
                 <div class="ripple-section">
-                    <h2><?php _e( 'Choose & Order Platforms', 'ripple-social-share' ); ?></h2>
-                    <p class="description"><?php _e( 'Toggle platforms on/off and drag to reorder. New platforms can be added via the ripple_platforms filter.', 'ripple-social-share' ); ?></p>
+                    <h2><?php esc_html_e( 'Choose & Order Platforms', 'ripple-social-share' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'Toggle platforms on/off and drag to reorder. New platforms can be added via the ripple_platforms filter.', 'ripple-social-share' ); ?></p>
 
                     <input type="hidden" name="ripple_settings[platform_order]" id="ripple-platform-order"
                            value="<?php echo esc_attr( isset( $settings['platform_order'] ) ? $settings['platform_order'] : '' ); ?>">
@@ -237,11 +238,11 @@ class Ripple_Admin {
                         <li class="ripple-platform-item" data-slug="<?php echo esc_attr( $slug ); ?>">
                             <span class="ripple-drag-handle">&#9776;</span>
                             <span class="ripple-platform-icon" style="color: <?php echo esc_attr( $p['color'] ); ?>">
-                                <?php echo $p['icon']; ?>
+                                <?php echo wp_kses_post( $p['icon'] ); ?>
                             </span>
                             <label>
                                 <input type="checkbox" name="ripple_settings[platforms][]"
-                                       value="<?php echo esc_attr( $slug ); ?>" <?php echo $checked; ?>>
+                                       value="<?php echo esc_attr( $slug ); ?>" <?php echo esc_attr( $checked ); ?>>
                                 <?php echo esc_html( $p['label'] ); ?>
                             </label>
                         </li>
@@ -251,11 +252,11 @@ class Ripple_Admin {
 
                 <?php elseif ( $active_tab === 'styling' ) : ?>
                 <div class="ripple-section">
-                    <h2><?php _e( 'Button Style', 'ripple-social-share' ); ?></h2>
+                    <h2><?php esc_html_e( 'Button Style', 'ripple-social-share' ); ?></h2>
 
                     <!-- SECTION 1: DISPLAY MODE -->
-                    <h3><?php _e( 'Display Mode', 'ripple-social-share' ); ?></h3>
-                    <p class="description"><?php _e( 'Choose how buttons appear on your site. The floating button is configured separately under Floating tab.', 'ripple-social-share' ); ?></p>
+                    <h3><?php esc_html_e( 'Display Mode', 'ripple-social-share' ); ?></h3>
+                    <p class="description"><?php esc_html_e( 'Choose how buttons appear on your site. The floating button is configured separately under Floating tab.', 'ripple-social-share' ); ?></p>
 
                     <?php $dm = isset( $settings['display_mode'] ) ? $settings['display_mode'] : 'inline'; ?>
                     <div class="ripple-mode-cards">
@@ -270,8 +271,8 @@ class Ripple_Admin {
                                 </div>
                             </div>
                             <div class="ripple-mode-card-info">
-                                <strong><?php _e( 'Inline', 'ripple-social-share' ); ?></strong>
-                                <span><?php _e( 'All buttons visible in a row', 'ripple-social-share' ); ?></span>
+                                <strong><?php esc_html_e( 'Inline', 'ripple-social-share' ); ?></strong>
+                                <span><?php esc_html_e( 'All buttons visible in a row', 'ripple-social-share' ); ?></span>
                             </div>
                         </label>
 
@@ -292,8 +293,8 @@ class Ripple_Admin {
                                 </div>
                             </div>
                             <div class="ripple-mode-card-info">
-                                <strong><?php _e( 'Collapsible', 'ripple-social-share' ); ?></strong>
-                                <span><?php _e( 'Share button that expands on click', 'ripple-social-share' ); ?></span>
+                                <strong><?php esc_html_e( 'Collapsible', 'ripple-social-share' ); ?></strong>
+                                <span><?php esc_html_e( 'Share button that expands on click', 'ripple-social-share' ); ?></span>
                             </div>
                         </label>
                     </div>
@@ -301,11 +302,11 @@ class Ripple_Admin {
                     <hr style="margin:30px 0;">
 
                     <!-- SECTION 2: GLOBAL STYLE -->
-                    <h3><?php _e( 'Global Style', 'ripple-social-share' ); ?></h3>
+                    <h3><?php esc_html_e( 'Global Style', 'ripple-social-share' ); ?></h3>
 
                     <table class="form-table">
                         <tr>
-                            <th><?php _e( 'Shape', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Shape', 'ripple-social-share' ); ?></th>
                             <td>
                                 <fieldset class="ripple-shape-picker">
                                     <?php
@@ -314,18 +315,18 @@ class Ripple_Admin {
                                     foreach ( $shapes as $val => $label ) :
                                     ?>
                                     <label class="ripple-shape-option <?php echo $current_style === $val ? 'selected' : ''; ?>">
-                                        <input type="radio" name="ripple_settings[style]" value="<?php echo $val; ?>"
+                                        <input type="radio" name="ripple_settings[style]" value="<?php echo esc_attr( $val ); ?>"
                                             <?php checked( $current_style, $val ); ?>>
-                                        <span class="ripple-shape-preview ripple-shape-<?php echo $val; ?>"></span>
+                                        <span class="ripple-shape-preview ripple-shape-<?php echo esc_attr( $val ); ?>"></span>
                                         <?php echo esc_html( $label ); ?>
                                     </label>
                                     <?php endforeach; ?>
                                 </fieldset>
-                                <p class="description" style="margin-top:8px;"><?php _e( 'Button corner style. Choose between completely circular, slightly rounded, or perfectly square.', 'ripple-social-share' ); ?></p>
+                                <p class="description" style="margin-top:8px;"><?php esc_html_e( 'Button corner style. Choose between completely circular, slightly rounded, or perfectly square.', 'ripple-social-share' ); ?></p>
                             </td>
                         </tr>
                         <tr>
-                            <th><?php _e( 'Border Radius', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Border Radius', 'ripple-social-share' ); ?></th>
                             <td>
                                 <?php
                                 $radius_type = isset( $settings['border_radius_type'] ) ? $settings['border_radius_type'] : 'shape';
@@ -334,12 +335,12 @@ class Ripple_Admin {
                                 <label style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
                                     <input type="radio" name="ripple_settings[border_radius_type]" value="shape"
                                         <?php checked( $radius_type, 'shape' ); ?> class="ripple-radius-toggle">
-                                    <span><?php _e( 'Use shape preset', 'ripple-social-share' ); ?></span>
+                                    <span><?php esc_html_e( 'Use shape preset', 'ripple-social-share' ); ?></span>
                                 </label>
                                 <label style="display:flex; align-items:center; gap:10px;">
                                     <input type="radio" name="ripple_settings[border_radius_type]" value="custom"
                                         <?php checked( $radius_type, 'custom' ); ?> class="ripple-radius-toggle">
-                                    <span><?php _e( 'Custom radius:', 'ripple-social-share' ); ?></span>
+                                    <span><?php esc_html_e( 'Custom radius:', 'ripple-social-share' ); ?></span>
                                 </label>
                                 <div class="ripple-custom-radius-input" style="<?php echo $radius_type === 'custom' ? '' : 'display:none;'; ?> margin-top:8px;">
                                     <input type="range" name="ripple_settings[border_radius_custom]" min="0" max="50"
@@ -349,7 +350,7 @@ class Ripple_Admin {
                             </td>
                         </tr>
                         <tr>
-                            <th><?php _e( 'Size', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Size', 'ripple-social-share' ); ?></th>
                             <td>
                                 <?php
                                 $sizes = array( 'small' => 'Small (32px)', 'medium' => 'Medium (40px)', 'large' => 'Large (48px)' );
@@ -357,7 +358,7 @@ class Ripple_Admin {
                                 ?>
                                 <select name="ripple_settings[size]">
                                     <?php foreach ( $sizes as $val => $label ) : ?>
-                                    <option value="<?php echo $val; ?>" <?php selected( $current_size, $val ); ?>>
+                                    <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $current_size, $val ); ?>>
                                         <?php echo esc_html( $label ); ?>
                                     </option>
                                     <?php endforeach; ?>
@@ -365,58 +366,58 @@ class Ripple_Admin {
                             </td>
                         </tr>
                         <tr>
-                            <th><?php _e( 'Button Spacing', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Button Spacing', 'ripple-social-share' ); ?></th>
                             <td>
                                 <?php $gap = isset( $settings['button_gap'] ) ? $settings['button_gap'] : 8; ?>
                                 <input type="range" name="ripple_settings[button_gap]" min="4" max="24" value="<?php echo esc_attr( $gap ); ?>" class="ripple-range-slider">
                                 <span class="ripple-range-value"><?php echo esc_html( $gap ); ?>px</span>
-                                <p class="description" style="margin-top:8px;"><?php _e( 'Space between buttons (4-24px)', 'ripple-social-share' ); ?></p>
+                                <p class="description" style="margin-top:8px;"><?php esc_html_e( 'Space between buttons (4-24px)', 'ripple-social-share' ); ?></p>
                             </td>
                         </tr>
                         <tr>
-                            <th><?php _e( 'Shadow', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Shadow', 'ripple-social-share' ); ?></th>
                             <td>
                                 <?php $shadow = isset( $settings['shadow_preset'] ) ? $settings['shadow_preset'] : 'none'; ?>
                                 <select name="ripple_settings[shadow_preset]">
-                                    <option value="none" <?php selected( $shadow, 'none' ); ?>><?php _e( 'None', 'ripple-social-share' ); ?></option>
-                                    <option value="subtle" <?php selected( $shadow, 'subtle' ); ?>><?php _e( 'Subtle', 'ripple-social-share' ); ?></option>
-                                    <option value="medium" <?php selected( $shadow, 'medium' ); ?>><?php _e( 'Medium', 'ripple-social-share' ); ?></option>
-                                    <option value="bold" <?php selected( $shadow, 'bold' ); ?>><?php _e( 'Bold', 'ripple-social-share' ); ?></option>
+                                    <option value="none" <?php selected( $shadow, 'none' ); ?>><?php esc_html_e( 'None', 'ripple-social-share' ); ?></option>
+                                    <option value="subtle" <?php selected( $shadow, 'subtle' ); ?>><?php esc_html_e( 'Subtle', 'ripple-social-share' ); ?></option>
+                                    <option value="medium" <?php selected( $shadow, 'medium' ); ?>><?php esc_html_e( 'Medium', 'ripple-social-share' ); ?></option>
+                                    <option value="bold" <?php selected( $shadow, 'bold' ); ?>><?php esc_html_e( 'Bold', 'ripple-social-share' ); ?></option>
                                 </select>
-                                <p class="description" style="margin-top:8px;"><?php _e( 'Button shadow effect for depth', 'ripple-social-share' ); ?></p>
+                                <p class="description" style="margin-top:8px;"><?php esc_html_e( 'Button shadow effect for depth', 'ripple-social-share' ); ?></p>
                             </td>
                         </tr>
                         <tr>
-                            <th><?php _e( 'Hover Effect', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Hover Effect', 'ripple-social-share' ); ?></th>
                             <td>
                                 <?php $hover = isset( $settings['hover_animation'] ) ? $settings['hover_animation'] : 'lift'; ?>
                                 <select name="ripple_settings[hover_animation]">
-                                    <option value="lift" <?php selected( $hover, 'lift' ); ?>><?php _e( 'Lift up', 'ripple-social-share' ); ?></option>
-                                    <option value="grow" <?php selected( $hover, 'grow' ); ?>><?php _e( 'Grow larger', 'ripple-social-share' ); ?></option>
-                                    <option value="glow" <?php selected( $hover, 'glow' ); ?>><?php _e( 'Glow shadow', 'ripple-social-share' ); ?></option>
-                                    <option value="fade" <?php selected( $hover, 'fade' ); ?>><?php _e( 'Fade out', 'ripple-social-share' ); ?></option>
-                                    <option value="shine" <?php selected( $hover, 'shine' ); ?>><?php _e( 'Shine bright', 'ripple-social-share' ); ?></option>
+                                    <option value="lift" <?php selected( $hover, 'lift' ); ?>><?php esc_html_e( 'Lift up', 'ripple-social-share' ); ?></option>
+                                    <option value="grow" <?php selected( $hover, 'grow' ); ?>><?php esc_html_e( 'Grow larger', 'ripple-social-share' ); ?></option>
+                                    <option value="glow" <?php selected( $hover, 'glow' ); ?>><?php esc_html_e( 'Glow shadow', 'ripple-social-share' ); ?></option>
+                                    <option value="fade" <?php selected( $hover, 'fade' ); ?>><?php esc_html_e( 'Fade out', 'ripple-social-share' ); ?></option>
+                                    <option value="shine" <?php selected( $hover, 'shine' ); ?>><?php esc_html_e( 'Shine bright', 'ripple-social-share' ); ?></option>
                                 </select>
-                                <p class="description" style="margin-top:8px;"><?php _e( 'Animation when hovering over buttons', 'ripple-social-share' ); ?></p>
+                                <p class="description" style="margin-top:8px;"><?php esc_html_e( 'Animation when hovering over buttons', 'ripple-social-share' ); ?></p>
                             </td>
                         </tr>
                         <tr>
-                            <th><?php _e( 'Show Labels', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Show Labels', 'ripple-social-share' ); ?></th>
                             <td>
                                 <label>
                                     <input type="checkbox" name="ripple_settings[show_labels]" value="1"
                                         <?php checked( ! empty( $settings['show_labels'] ) ); ?>>
-                                    <?php _e( 'Show platform name next to icon', 'ripple-social-share' ); ?>
+                                    <?php esc_html_e( 'Show platform name next to icon', 'ripple-social-share' ); ?>
                                 </label>
                             </td>
                         </tr>
                         <tr>
-                            <th><?php _e( 'Heading Text', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Heading Text', 'ripple-social-share' ); ?></th>
                             <td>
                                 <input type="text" name="ripple_settings[share_heading]" class="regular-text"
                                        value="<?php echo esc_attr( isset( $settings['share_heading'] ) ? $settings['share_heading'] : '' ); ?>"
-                                       placeholder="<?php _e( 'e.g. Share this post', 'ripple-social-share' ); ?>">
-                                <p class="description"><?php _e( 'Optional heading above the buttons. Leave blank for no heading.', 'ripple-social-share' ); ?></p>
+                                       placeholder="<?php esc_html_e( 'e.g. Share this post', 'ripple-social-share' ); ?>">
+                                <p class="description"><?php esc_html_e( 'Optional heading above the buttons. Leave blank for no heading.', 'ripple-social-share' ); ?></p>
                             </td>
                         </tr>
                     </table>
@@ -424,9 +425,9 @@ class Ripple_Admin {
                     <hr style="margin:30px 0;">
 
                     <!-- SECTION 3: COLOR THEME -->
-                    <h3><?php _e( 'Color Theme', 'ripple-social-share' ); ?></h3>
+                    <h3><?php esc_html_e( 'Color Theme', 'ripple-social-share' ); ?></h3>
 
-                    <p class="description" style="margin-bottom:16px;"><?php _e( 'Choose a preset color scheme for your buttons.', 'ripple-social-share' ); ?></p>
+                    <p class="description" style="margin-bottom:16px;"><?php esc_html_e( 'Choose a preset color scheme for your buttons.', 'ripple-social-share' ); ?></p>
 
                     <?php $color_preset = isset( $settings['color_preset'] ) ? $settings['color_preset'] : 'brand'; ?>
                     <div class="ripple-preset-grid">
@@ -440,7 +441,7 @@ class Ripple_Admin {
                                     <div style="width:24px; height:24px; background:#1877F2; border-radius:50%;"></div>
                                 </div>
                             </div>
-                            <span class="ripple-preset-label"><?php _e( 'Brand Colors', 'ripple-social-share' ); ?></span>
+                            <span class="ripple-preset-label"><?php esc_html_e( 'Brand Colors', 'ripple-social-share' ); ?></span>
                         </label>
 
                         <label class="ripple-preset-card <?php echo $color_preset === 'mono-dark' ? 'ripple-preset-active' : ''; ?>">
@@ -452,7 +453,7 @@ class Ripple_Admin {
                                     <div style="width:24px; height:24px; background:#333; border-radius:50%;"></div>
                                 </div>
                             </div>
-                            <span class="ripple-preset-label"><?php _e( 'Mono Dark', 'ripple-social-share' ); ?></span>
+                            <span class="ripple-preset-label"><?php esc_html_e( 'Mono Dark', 'ripple-social-share' ); ?></span>
                         </label>
 
                         <label class="ripple-preset-card <?php echo $color_preset === 'mono-light' ? 'ripple-preset-active' : ''; ?>">
@@ -464,7 +465,7 @@ class Ripple_Admin {
                                     <div style="width:24px; height:24px; background:#e0e0e0; border-radius:50%; border:1px solid #ccc;"></div>
                                 </div>
                             </div>
-                            <span class="ripple-preset-label"><?php _e( 'Mono Light', 'ripple-social-share' ); ?></span>
+                            <span class="ripple-preset-label"><?php esc_html_e( 'Mono Light', 'ripple-social-share' ); ?></span>
                         </label>
 
                         <label class="ripple-preset-card <?php echo $color_preset === 'outline' ? 'ripple-preset-active' : ''; ?>">
@@ -476,7 +477,7 @@ class Ripple_Admin {
                                     <div style="width:24px; height:24px; border:2px solid #333; border-radius:50%;"></div>
                                 </div>
                             </div>
-                            <span class="ripple-preset-label"><?php _e( 'Outline', 'ripple-social-share' ); ?></span>
+                            <span class="ripple-preset-label"><?php esc_html_e( 'Outline', 'ripple-social-share' ); ?></span>
                         </label>
 
                         <label class="ripple-preset-card <?php echo $color_preset === 'minimal' ? 'ripple-preset-active' : ''; ?>">
@@ -488,7 +489,7 @@ class Ripple_Admin {
                                     <div style="width:16px; height:16px; background:#0085FF;"></div>
                                 </div>
                             </div>
-                            <span class="ripple-preset-label"><?php _e( 'Minimal', 'ripple-social-share' ); ?></span>
+                            <span class="ripple-preset-label"><?php esc_html_e( 'Minimal', 'ripple-social-share' ); ?></span>
                         </label>
 
                         <label class="ripple-preset-card <?php echo $color_preset === 'glass' ? 'ripple-preset-active' : ''; ?>">
@@ -496,7 +497,7 @@ class Ripple_Admin {
                             <div class="ripple-preset-preview">
                                 <div style="width:60px; height:30px; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.3); border-radius:6px; backdrop-filter:blur(10px);"></div>
                             </div>
-                            <span class="ripple-preset-label"><?php _e( 'Glass', 'ripple-social-share' ); ?></span>
+                            <span class="ripple-preset-label"><?php esc_html_e( 'Glass', 'ripple-social-share' ); ?></span>
                         </label>
 
                         <label class="ripple-preset-card <?php echo $color_preset === 'gradient' ? 'ripple-preset-active' : ''; ?>">
@@ -504,7 +505,7 @@ class Ripple_Admin {
                             <div class="ripple-preset-preview">
                                 <div style="width:60px; height:30px; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:6px;"></div>
                             </div>
-                            <span class="ripple-preset-label"><?php _e( 'Gradient', 'ripple-social-share' ); ?></span>
+                            <span class="ripple-preset-label"><?php esc_html_e( 'Gradient', 'ripple-social-share' ); ?></span>
                         </label>
 
                         <label class="ripple-preset-card <?php echo $color_preset === 'custom' ? 'ripple-preset-active' : ''; ?>">
@@ -515,23 +516,23 @@ class Ripple_Admin {
                                     <path d="M12 2v20M2 12h20"/>
                                 </svg>
                             </div>
-                            <span class="ripple-preset-label"><?php _e( 'Custom', 'ripple-social-share' ); ?></span>
+                            <span class="ripple-preset-label"><?php esc_html_e( 'Custom', 'ripple-social-share' ); ?></span>
                         </label>
                     </div>
 
                     <!-- Per-variant color pickers (only shown when preset = 'custom') -->
                     <div class="ripple-color-subtabs-wrapper" style="<?php echo $color_preset === 'custom' ? '' : 'display:none;'; ?> margin-top:24px; padding-top:24px; border-top:1px solid #ddd;">
-                        <h4><?php _e( 'Custom Colors', 'ripple-social-share' ); ?></h4>
+                        <h4><?php esc_html_e( 'Custom Colors', 'ripple-social-share' ); ?></h4>
 
                         <div class="ripple-color-subtabs">
                             <button type="button" class="ripple-color-subtab ripple-color-subtab-inline active" data-variant="inline">
-                                <?php _e( 'Inline', 'ripple-social-share' ); ?>
+                                <?php esc_html_e( 'Inline', 'ripple-social-share' ); ?>
                             </button>
                             <button type="button" class="ripple-color-subtab ripple-color-subtab-collapsible" data-variant="collapsible">
-                                <?php _e( 'Collapsible', 'ripple-social-share' ); ?>
+                                <?php esc_html_e( 'Collapsible', 'ripple-social-share' ); ?>
                             </button>
                             <button type="button" class="ripple-color-subtab ripple-color-subtab-floating" data-variant="floating">
-                                <?php _e( 'Floating', 'ripple-social-share' ); ?>
+                                <?php esc_html_e( 'Floating', 'ripple-social-share' ); ?>
                             </button>
                         </div>
 
@@ -539,39 +540,39 @@ class Ripple_Admin {
                         <div class="ripple-color-panel ripple-color-panel-inline" style="display:block;">
                             <table class="form-table">
                                 <tr>
-                                    <th><?php _e( 'Button Background', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Button Background', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][inline][bg]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['inline']['bg'] ?? '#333333' ); ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><?php _e( 'Icon/Text Color', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Icon/Text Color', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][inline][text]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['inline']['text'] ?? '#ffffff' ); ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><?php _e( 'Hover Background', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Hover Background', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][inline][hover_bg]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['inline']['hover_bg'] ?? '#555555' ); ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><?php _e( 'Hover Text Color', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Hover Text Color', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][inline][hover_text]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['inline']['hover_text'] ?? '#ffffff' ); ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><?php _e( 'Border Color', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Border Color', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][inline][border]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['inline']['border'] ?? '' ); ?>">
-                                        <p class="description"><?php _e( 'Optional. Leave empty for no border.', 'ripple-social-share' ); ?></p>
+                                        <p class="description"><?php esc_html_e( 'Optional. Leave empty for no border.', 'ripple-social-share' ); ?></p>
                                     </td>
                                 </tr>
                             </table>
@@ -581,35 +582,35 @@ class Ripple_Admin {
                         <div class="ripple-color-panel ripple-color-panel-collapsible" style="display:none;">
                             <table class="form-table">
                                 <tr>
-                                    <th><?php _e( 'Trigger Background', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Trigger Background', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][collapsible][trigger_bg]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['collapsible']['trigger_bg'] ?? '#333333' ); ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><?php _e( 'Trigger Text Color', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Trigger Text Color', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][collapsible][trigger_text]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['collapsible']['trigger_text'] ?? '#ffffff' ); ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><?php _e( 'Trigger Icon Color', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Trigger Icon Color', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][collapsible][trigger_icon]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['collapsible']['trigger_icon'] ?? '#ffffff' ); ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><?php _e( 'Trigger Hover Background', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Trigger Hover Background', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][collapsible][trigger_hover_bg]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['collapsible']['trigger_hover_bg'] ?? '#555555' ); ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><?php _e( 'Panel Background', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Panel Background', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][collapsible][panel_bg]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['collapsible']['panel_bg'] ?? '#f9f9f9' ); ?>">
@@ -622,21 +623,21 @@ class Ripple_Admin {
                         <div class="ripple-color-panel ripple-color-panel-floating" style="display:none;">
                             <table class="form-table">
                                 <tr>
-                                    <th><?php _e( 'Trigger Background', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Trigger Background', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][floating][trigger_bg]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['floating']['trigger_bg'] ?? '#333333' ); ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><?php _e( 'Trigger Icon Color', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Trigger Icon Color', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][floating][trigger_icon]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['floating']['trigger_icon'] ?? '#ffffff' ); ?>">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><?php _e( 'Trigger Hover Background', 'ripple-social-share' ); ?></th>
+                                    <th><?php esc_html_e( 'Trigger Hover Background', 'ripple-social-share' ); ?></th>
                                     <td>
                                         <input type="text" name="ripple_settings[colors][floating][trigger_hover_bg]" class="ripple-color-field"
                                                value="<?php echo esc_attr( $settings['colors']['floating']['trigger_hover_bg'] ?? '#555555' ); ?>">
@@ -648,7 +649,7 @@ class Ripple_Admin {
 
                     <hr style="margin:30px 0;">
 
-                    <h3><?php _e( 'Preview', 'ripple-social-share' ); ?></h3>
+                    <h3><?php esc_html_e( 'Preview', 'ripple-social-share' ); ?></h3>
                     <div id="ripple-preview" class="ripple-preview-box">
                         <?php
                         // Render a live preview using the current settings
@@ -681,7 +682,7 @@ class Ripple_Admin {
                                 $shadow = isset( $settings['shadow_preset'] ) ? $settings['shadow_preset'] : 'none';
                                 if ( isset( $shadow_map[$shadow] ) ) $p_css .= '--ripple-btn-shadow:' . $shadow_map[$shadow] . ';';
                                 $p_css .= '}</style>';
-                                echo $p_css;
+                                echo wp_kses_post( $p_css );
 
                                 if ( $p_display_mode === 'collapsible' ) {
                                     // Show collapsible preview
@@ -699,7 +700,7 @@ class Ripple_Admin {
                                                    href="#" onclick="return false;"
                                                    <?php echo $p_color_preset === 'brand' ? 'style="--ripple-btn-color:' . esc_attr( $platform['color'] ) . ';"' : ''; ?>
                                                    title="<?php echo esc_attr( $platform['label'] ); ?>">
-                                                    <span class="ripple-icon"><?php echo $platform['icon']; ?></span>
+                                                    <span class="ripple-icon"><?php echo wp_kses_post( $platform['icon'] ); ?></span>
                                                     <span class="ripple-label"><?php echo esc_html( $platform['label'] ); ?></span>
                                                 </a>
                                                 <?php endforeach; ?>
@@ -720,7 +721,7 @@ class Ripple_Admin {
                                                href="#" onclick="return false;"
                                                <?php echo $p_color_preset === 'brand' ? 'style="--ripple-btn-color:' . esc_attr( $platform['color'] ) . ';"' : ''; ?>
                                                title="<?php echo esc_attr( $platform['label'] ); ?>">
-                                                <span class="ripple-icon"><?php echo $platform['icon']; ?></span>
+                                                <span class="ripple-icon"><?php echo wp_kses_post( $platform['icon'] ); ?></span>
                                                 <?php if ( $p_show_labels ) : ?>
                                                 <span class="ripple-label"><?php echo esc_html( $platform['label'] ); ?></span>
                                                 <?php endif; ?>
@@ -731,7 +732,7 @@ class Ripple_Admin {
                                     <?php
                                 }
                             } else {
-                                echo '<p class="description">' . __( 'Enable some platforms in the Platforms tab to see a preview.', 'ripple-social-share' ) . '</p>';
+                                echo '<p class="description">' . esc_html( __( 'Enable some platforms in the Platforms tab to see a preview.', 'ripple-social-share' ) ) . '</p>';
                             }
                         }
                         ?>
@@ -740,24 +741,24 @@ class Ripple_Admin {
 
                 <?php elseif ( $active_tab === 'placement' ) : ?>
                 <div class="ripple-section">
-                    <h2><?php _e( 'In-Content Buttons', 'ripple-social-share' ); ?></h2>
-                    <p class="description"><?php _e( 'These settings control the inline/collapsible share buttons placed within your content.', 'ripple-social-share' ); ?></p>
+                    <h2><?php esc_html_e( 'In-Content Buttons', 'ripple-social-share' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'These settings control the inline/collapsible share buttons placed within your content.', 'ripple-social-share' ); ?></p>
 
                     <table class="form-table">
                         <tr>
-                            <th><?php _e( 'Position', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Position', 'ripple-social-share' ); ?></th>
                             <td>
                                 <?php $ap = isset( $settings['auto_placement'] ) ? $settings['auto_placement'] : 'after'; ?>
                                 <select name="ripple_settings[auto_placement]" id="ripple-auto-placement">
-                                    <option value="after" <?php selected( $ap, 'after' ); ?>><?php _e( 'After content', 'ripple-social-share' ); ?></option>
-                                    <option value="before" <?php selected( $ap, 'before' ); ?>><?php _e( 'Before content', 'ripple-social-share' ); ?></option>
-                                    <option value="both" <?php selected( $ap, 'both' ); ?>><?php _e( 'Before & after content', 'ripple-social-share' ); ?></option>
-                                    <option value="none" <?php selected( $ap, 'none' ); ?>><?php _e( 'Manual only (shortcode)', 'ripple-social-share' ); ?></option>
+                                    <option value="after" <?php selected( $ap, 'after' ); ?>><?php esc_html_e( 'After content', 'ripple-social-share' ); ?></option>
+                                    <option value="before" <?php selected( $ap, 'before' ); ?>><?php esc_html_e( 'Before content', 'ripple-social-share' ); ?></option>
+                                    <option value="both" <?php selected( $ap, 'both' ); ?>><?php esc_html_e( 'Before & after content', 'ripple-social-share' ); ?></option>
+                                    <option value="none" <?php selected( $ap, 'none' ); ?>><?php esc_html_e( 'Manual only (shortcode)', 'ripple-social-share' ); ?></option>
                                 </select>
                             </td>
                         </tr>
                         <tr class="ripple-post-types-row" style="<?php echo $ap === 'none' ? 'display:none;' : ''; ?>">
-                            <th><?php _e( 'Post Types', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Post Types', 'ripple-social-share' ); ?></th>
                             <td>
                                 <input type="hidden" name="ripple_settings[post_types_submitted]" value="1">
                                 <?php
@@ -779,29 +780,29 @@ class Ripple_Admin {
 
                     <hr style="margin:30px 0;">
 
-                    <h3><?php _e( 'Shortcode', 'ripple-social-share' ); ?></h3>
+                    <h3><?php esc_html_e( 'Shortcode', 'ripple-social-share' ); ?></h3>
                     <p class="description">
-                        <?php _e( 'Use the shortcode below anywhere in your content, widgets, or Divi Code Module:', 'ripple-social-share' ); ?>
+                        <?php esc_html_e( 'Use the shortcode below anywhere in your content, widgets, or Divi Code Module:', 'ripple-social-share' ); ?>
                     </p>
                     <code class="ripple-shortcode-display">[ripple_share]</code>
                     <p class="description" style="margin-top:8px;">
-                        <?php _e( 'Override display mode per shortcode:', 'ripple-social-share' ); ?>
+                        <?php esc_html_e( 'Override display mode per shortcode:', 'ripple-social-share' ); ?>
                         <code>[ripple_share mode="collapsible"]</code> &nbsp;
                         <code>[ripple_share mode="inline"]</code>
                     </p>
                     <p class="description" style="margin-top:4px;">
-                        <?php _e( 'In PHP templates:', 'ripple-social-share' ); ?>
+                        <?php esc_html_e( 'In PHP templates:', 'ripple-social-share' ); ?>
                         <code>&lt;?php echo do_shortcode('[ripple_share]'); ?&gt;</code>
                     </p>
                     <p class="description" style="margin-top:4px; color:#888;">
-                        <?php _e( 'The legacy shortcode [webworq_share] still works for backward compatibility.', 'ripple-social-share' ); ?>
+                        <?php esc_html_e( 'The legacy shortcode [webworq_share] still works for backward compatibility.', 'ripple-social-share' ); ?>
                     </p>
                 </div>
 
                 <?php elseif ( $active_tab === 'floating' ) : ?>
                 <div class="ripple-section">
-                    <h2><?php _e( 'Floating Share Button', 'ripple-social-share' ); ?></h2>
-                    <p class="description"><?php _e( 'A sticky share button fixed to the screen corner. Works independently from the in-content buttons — you can enable both at the same time.', 'ripple-social-share' ); ?></p>
+                    <h2><?php esc_html_e( 'Floating Share Button', 'ripple-social-share' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'A sticky share button fixed to the screen corner. Works independently from the in-content buttons — you can enable both at the same time.', 'ripple-social-share' ); ?></p>
 
                     <?php
                     $float_enabled  = ! empty( $settings['floating_enabled'] );
@@ -814,17 +815,17 @@ class Ripple_Admin {
 
                     <table class="form-table">
                         <tr>
-                            <th><?php _e( 'Enable', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Enable', 'ripple-social-share' ); ?></th>
                             <td>
                                 <label class="ripple-toggle-label">
                                     <input type="checkbox" name="ripple_settings[floating_enabled]" value="1" id="ripple-floating-enabled"
                                         <?php checked( $float_enabled ); ?>>
-                                    <?php _e( 'Show floating share button', 'ripple-social-share' ); ?>
+                                    <?php esc_html_e( 'Show floating share button', 'ripple-social-share' ); ?>
                                 </label>
                             </td>
                         </tr>
                         <tr class="ripple-floating-settings" style="<?php echo ! $float_enabled ? 'display:none;' : ''; ?>">
-                            <th><?php _e( 'Screen Position', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Screen Position', 'ripple-social-share' ); ?></th>
                             <td>
                                 <div class="ripple-position-picker">
                                     <div class="ripple-position-grid">
@@ -851,7 +852,7 @@ class Ripple_Admin {
                             </td>
                         </tr>
                         <tr class="ripple-floating-settings" style="<?php echo ! $float_enabled ? 'display:none;' : ''; ?>">
-                            <th><?php _e( 'Show On', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Show On', 'ripple-social-share' ); ?></th>
                             <td>
                                 <input type="hidden" name="ripple_settings[floating_post_types_submitted]" value="1">
                                 <?php
@@ -868,7 +869,7 @@ class Ripple_Admin {
                             </td>
                         </tr>
                         <tr class="ripple-floating-settings" style="<?php echo ! $float_enabled ? 'display:none;' : ''; ?>">
-                            <th><?php _e( 'FAB Size', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'FAB Size', 'ripple-social-share' ); ?></th>
                             <td>
                                 <?php
                                 $fab_sizes = array(
@@ -879,7 +880,7 @@ class Ripple_Admin {
                                 ?>
                                 <select name="ripple_settings[fab_size]">
                                     <?php foreach ( $fab_sizes as $val => $label ) : ?>
-                                    <option value="<?php echo $val; ?>" <?php selected( $fab_size, $val ); ?>>
+                                    <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $fab_size, $val ); ?>>
                                         <?php echo esc_html( $label ); ?>
                                     </option>
                                     <?php endforeach; ?>
@@ -887,12 +888,12 @@ class Ripple_Admin {
                             </td>
                         </tr>
                         <tr class="ripple-floating-settings" style="<?php echo ! $float_enabled ? 'display:none;' : ''; ?>">
-                            <th><?php _e( 'Show on Mobile', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Show on Mobile', 'ripple-social-share' ); ?></th>
                             <td>
                                 <label>
                                     <input type="checkbox" name="ripple_settings[fab_mobile]" value="1"
                                         <?php checked( $fab_mobile ); ?>>
-                                    <?php _e( 'Display on mobile devices', 'ripple-social-share' ); ?>
+                                    <?php esc_html_e( 'Display on mobile devices', 'ripple-social-share' ); ?>
                                 </label>
                             </td>
                         </tr>
@@ -901,22 +902,22 @@ class Ripple_Admin {
 
                 <?php elseif ( $active_tab === 'metadata' ) : ?>
                 <div class="ripple-section">
-                    <h2><?php _e( 'Open Graph & Twitter Card Metadata', 'ripple-social-share' ); ?></h2>
-                    <p class="description"><?php _e( 'These meta tags ensure posts show rich previews when shared. If you already use an SEO plugin (Yoast, RankMath, etc.) that handles OG tags, disable this to avoid duplicates.', 'ripple-social-share' ); ?></p>
+                    <h2><?php esc_html_e( 'Open Graph & Twitter Card Metadata', 'ripple-social-share' ); ?></h2>
+                    <p class="description"><?php esc_html_e( 'These meta tags ensure posts show rich previews when shared. If you already use an SEO plugin (Yoast, RankMath, etc.) that handles OG tags, disable this to avoid duplicates.', 'ripple-social-share' ); ?></p>
 
                     <table class="form-table">
                         <tr>
-                            <th><?php _e( 'Inject Meta Tags', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Inject Meta Tags', 'ripple-social-share' ); ?></th>
                             <td>
                                 <label>
                                     <input type="checkbox" name="ripple_settings[inject_og]" value="1"
                                         <?php checked( ! empty( $settings['inject_og'] ) ); ?>>
-                                    <?php _e( 'Add Open Graph & Twitter Card meta tags to &lt;head&gt;', 'ripple-social-share' ); ?>
+                                    <?php esc_html_e( 'Add Open Graph & Twitter Card meta tags to &lt;head&gt;', 'ripple-social-share' ); ?>
                                 </label>
                             </td>
                         </tr>
                         <tr>
-                            <th><?php _e( 'Fallback Image', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'Fallback Image', 'ripple-social-share' ); ?></th>
                             <td>
                                 <?php $default_img = isset( $settings['default_image'] ) ? $settings['default_image'] : ''; ?>
                                 <div class="ripple-image-upload">
@@ -924,22 +925,22 @@ class Ripple_Admin {
                                            class="regular-text" value="<?php echo esc_url( $default_img ); ?>"
                                            placeholder="https://">
                                     <button type="button" class="button" id="ripple-upload-image">
-                                        <?php _e( 'Choose Image', 'ripple-social-share' ); ?>
+                                        <?php esc_html_e( 'Choose Image', 'ripple-social-share' ); ?>
                                     </button>
                                 </div>
-                                <p class="description"><?php _e( 'Used when a post has no featured image. Recommended: 1200x630px.', 'ripple-social-share' ); ?></p>
+                                <p class="description"><?php esc_html_e( 'Used when a post has no featured image. Recommended: 1200x630px.', 'ripple-social-share' ); ?></p>
                                 <?php if ( $default_img ) : ?>
                                 <img src="<?php echo esc_url( $default_img ); ?>" style="max-width:300px;margin-top:8px;border-radius:4px;">
                                 <?php endif; ?>
                             </td>
                         </tr>
                         <tr>
-                            <th><?php _e( 'X/Twitter Handle', 'ripple-social-share' ); ?></th>
+                            <th><?php esc_html_e( 'X/Twitter Handle', 'ripple-social-share' ); ?></th>
                             <td>
                                 <input type="text" name="ripple_settings[twitter_handle]" class="regular-text"
                                        value="<?php echo esc_attr( isset( $settings['twitter_handle'] ) ? $settings['twitter_handle'] : '' ); ?>"
                                        placeholder="username">
-                                <p class="description"><?php _e( 'Without the @ symbol. Used for twitter:site meta tag.', 'ripple-social-share' ); ?></p>
+                                <p class="description"><?php esc_html_e( 'Without the @ symbol. Used for twitter:site meta tag.', 'ripple-social-share' ); ?></p>
                             </td>
                         </tr>
                     </table>
@@ -956,11 +957,14 @@ class Ripple_Admin {
 
             <div class="ripple-footer">
                 <p>
-                    <?php printf(
-                        __( 'Built with %s by %s', 'ripple-social-share' ),
+                    <?php
+                    echo wp_kses_post( sprintf(
+                        /* translators: %1$s: heart symbol, %2$s: company name with link */
+                        __( 'Built with %1$s by %2$s', 'ripple-social-share' ),
                         '<span style="color:#e25555;">&hearts;</span>',
                         '<a href="https://webworq.dk" target="_blank" class="ripple-footer-brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 560" class="ripple-footer-logo"><g transform="translate(-66, 0)"><path d="M482.028,127.552c68.678-3.438,133.791,20.53,184.477,66.29l305.786,305.871c-11.529,6.257-23.924,11.151-36.506,14.931-89.755,26.968-184.864,3.869-251.798-61.098L385.201,154.676c-.615-2.799,13.565-8.158,16.384-9.324,25.113-10.379,53.294-16.441,80.443-17.8h0Z"/><path d="M562.559,383.751c37.056,37.172,74.009,74.57,110.897,111.928,2.256,2.285,5.104,1.704,4.126,5.766-10.939,3.084-21.029,8.499-31.842,12.036-88.447,28.927-186.958,6.104-253.544-58.195L92.748,155.923l-1.054-4.09c96.742-44.785,204.585-27.196,282.992,43.779,33.721,30.524,64.337,65.524,96.438,97.709,30.263,30.342,61.198,60.099,91.435,90.431h0Z"/><path d="M1040.143,130.723l-1.741,3.51c-47.331,46.61-93.494,94.433-140.972,140.891-22.606,22.121-40.946,45.234-74.833,21.098l-167.233-166.664c23.573-1.811,47.174-.719,70.806-1.133,81.628-1.429,163.864-2.228,245.511,0,22.879.624,45.593.686,68.462,2.297h0Z" fill="#f60"/></g></svg> Webworq</a>'
-                    ); ?>
+                    ) );
+                    ?>
                 </p>
             </div>
         </div>
@@ -985,7 +989,7 @@ class Ripple_Admin {
             $legacy_fields = array( 'display_mode', 'style', 'size', 'color_mode', 'custom_color', 'custom_hover', 'share_heading' );
             foreach ( $legacy_fields as $f ) {
                 if ( isset( $settings[ $f ] ) ) {
-                    echo '<input type="hidden" name="ripple_settings[' . $f . ']" value="' . esc_attr( $settings[ $f ] ) . '">';
+                    echo '<input type="hidden" name="ripple_settings[' . esc_attr( $f ) . ']" value="' . esc_attr( $settings[ $f ] ) . '">';
                 }
             }
             if ( ! empty( $settings['show_labels'] ) ) {
@@ -995,7 +999,7 @@ class Ripple_Admin {
             $new_fields = array( 'button_gap', 'border_radius_type', 'border_radius_custom', 'shadow_preset', 'hover_animation', 'color_preset' );
             foreach ( $new_fields as $f ) {
                 if ( isset( $settings[ $f ] ) ) {
-                    echo '<input type="hidden" name="ripple_settings[' . $f . ']" value="' . esc_attr( $settings[ $f ] ) . '">';
+                    echo '<input type="hidden" name="ripple_settings[' . esc_attr( $f ) . ']" value="' . esc_attr( $settings[ $f ] ) . '">';
                 }
             }
             // Colors array
@@ -1045,7 +1049,7 @@ class Ripple_Admin {
             $meta_fields = array( 'default_image', 'twitter_handle' );
             foreach ( $meta_fields as $f ) {
                 if ( isset( $settings[ $f ] ) ) {
-                    echo '<input type="hidden" name="ripple_settings[' . $f . ']" value="' . esc_attr( $settings[ $f ] ) . '">';
+                    echo '<input type="hidden" name="ripple_settings[' . esc_attr( $f ) . ']" value="' . esc_attr( $settings[ $f ] ) . '">';
                 }
             }
         }

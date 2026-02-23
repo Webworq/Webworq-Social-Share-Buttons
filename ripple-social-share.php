@@ -3,7 +3,7 @@
  * Plugin Name: Ripple — Smart Social Share Buttons
  * Plugin URI: https://webworq.dk
  * Description: Smart social share buttons with Open Graph & Twitter Card metadata for rich link previews. Built by Webworq.
- * Version: 3.1.0
+ * Version: 3.1.1
  * Author: Webworq
  * Author URI: https://webworq.dk
  * License: GPL v2 or later
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'RIPPLE_VERSION', '3.1.0' );
+define( 'RIPPLE_VERSION', '3.1.1' );
 define( 'RIPPLE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'RIPPLE_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'RIPPLE_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
