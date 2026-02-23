@@ -1,0 +1,672 @@
+/* =============================================
+   Ripple - Frontend CSS v3.0
+   Modes: Inline | Collapsible | Floating FAB
+   ============================================= */
+
+/* --- SHARED BASE STYLES --- */
+
+.ripple-share-buttons {
+    margin: 1.5em 0;
+    clear: both;
+}
+
+.ripple-heading {
+    display: block;
+    font-size: 0.85em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #666;
+    margin-bottom: 0.6em;
+}
+
+.ripple-buttons-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ripple-btn-gap, 8px);
+    align-items: center;
+}
+
+/* Base button */
+.ripple-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--ripple-btn-size, 40px);
+    height: var(--ripple-btn-size, 40px);
+    text-decoration: none !important;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+    box-sizing: border-box;
+    line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ripple-btn:active {
+    transform: translateY(0) scale(0.95);
+}
+
+/* Icon */
+.ripple-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--ripple-icon-size, 20px);
+    height: var(--ripple-icon-size, 20px);
+}
+
+.ripple-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+/* Label */
+.ripple-label {
+    font-size: 0.8em;
+    font-weight: 500;
+    margin-left: 6px;
+    white-space: nowrap;
+}
+
+.ripple-with-labels .ripple-btn {
+    width: auto;
+    padding: 0 16px;
+    gap: 6px;
+}
+
+/* --- SHAPES --- */
+.ripple-style-circle .ripple-btn,
+.ripple-style-circle .ripple-fab-option {
+    border-radius: 50%;
+}
+.ripple-style-circle.ripple-with-labels .ripple-btn {
+    border-radius: 999px;
+}
+.ripple-style-rounded .ripple-btn,
+.ripple-style-rounded .ripple-fab-option {
+    border-radius: var(--ripple-btn-radius, 8px);
+}
+.ripple-style-square .ripple-btn,
+.ripple-style-square .ripple-fab-option {
+    border-radius: 0;
+}
+
+/* --- HOVER ANIMATIONS --- */
+.ripple-hover-lift .ripple-btn:hover,
+.ripple-hover-lift .ripple-fab-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+.ripple-hover-grow .ripple-btn:hover,
+.ripple-hover-grow .ripple-fab-option:hover {
+    transform: scale(1.1);
+}
+.ripple-hover-glow .ripple-btn:hover,
+.ripple-hover-glow .ripple-fab-option:hover {
+    box-shadow: 0 0 16px rgba(0,0,0,0.3) !important;
+}
+.ripple-hover-fade .ripple-btn:hover,
+.ripple-hover-fade .ripple-fab-option:hover {
+    opacity: 0.7;
+}
+.ripple-hover-shine .ripple-btn:hover,
+.ripple-hover-shine .ripple-fab-option:hover {
+    filter: brightness(1.2);
+}
+
+/* --- COLOR PRESETS: BRAND --- */
+.ripple-preset-brand .ripple-btn,
+.ripple-preset-brand .ripple-fab-option {
+    background-color: var(--ripple-btn-color, #333);
+    color: #fff;
+    box-shadow: var(--ripple-btn-shadow, none);
+}
+.ripple-preset-brand .ripple-btn:hover,
+.ripple-preset-brand .ripple-fab-option:hover {
+    background-color: var(--ripple-btn-hover, #555);
+}
+
+/* --- COLOR PRESETS: MONO-DARK --- */
+.ripple-preset-mono-dark .ripple-btn,
+.ripple-preset-mono-dark .ripple-fab-option {
+    background-color: var(--ripple-btn-color, #333);
+    color: #fff;
+    box-shadow: var(--ripple-btn-shadow, none);
+}
+.ripple-preset-mono-dark .ripple-btn:hover,
+.ripple-preset-mono-dark .ripple-fab-option:hover {
+    background-color: var(--ripple-btn-hover, #555);
+}
+
+/* --- COLOR PRESETS: MONO-LIGHT --- */
+.ripple-preset-mono-light .ripple-btn,
+.ripple-preset-mono-light .ripple-fab-option {
+    background-color: var(--ripple-btn-color, #e0e0e0);
+    color: #333;
+    box-shadow: var(--ripple-btn-shadow, none);
+}
+.ripple-preset-mono-light .ripple-btn:hover,
+.ripple-preset-mono-light .ripple-fab-option:hover {
+    background-color: var(--ripple-btn-hover, #ccc);
+}
+
+/* --- COLOR PRESETS: OUTLINE --- */
+.ripple-preset-outline .ripple-btn,
+.ripple-preset-outline .ripple-fab-option {
+    background: transparent;
+    border: 2px solid var(--ripple-btn-color, #333);
+    color: var(--ripple-btn-color, #333);
+    box-shadow: none;
+}
+.ripple-preset-outline .ripple-btn:hover,
+.ripple-preset-outline .ripple-fab-option:hover {
+    background: var(--ripple-btn-color, #333);
+    color: #fff;
+    box-shadow: var(--ripple-btn-shadow, none);
+}
+
+/* --- COLOR PRESETS: MINIMAL --- */
+.ripple-preset-minimal .ripple-btn,
+.ripple-preset-minimal .ripple-fab-option {
+    background: transparent;
+    color: var(--ripple-btn-color, #333);
+    box-shadow: none;
+}
+.ripple-preset-minimal .ripple-btn:hover,
+.ripple-preset-minimal .ripple-fab-option:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+/* --- COLOR PRESETS: GLASS --- */
+.ripple-preset-glass .ripple-btn,
+.ripple-preset-glass .ripple-fab-option {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #333;
+    box-shadow: var(--ripple-btn-shadow, none);
+}
+
+/* --- COLOR PRESETS: GRADIENT --- */
+.ripple-preset-gradient .ripple-btn,
+.ripple-preset-gradient .ripple-fab-option {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    box-shadow: var(--ripple-btn-shadow, none);
+}
+
+/* --- COLOR PRESETS: CUSTOM --- */
+.ripple-preset-custom .ripple-btn,
+.ripple-preset-custom .ripple-fab-option {
+    background-color: var(--ripple-inline-bg, #333);
+    color: var(--ripple-inline-text, #fff);
+    box-shadow: var(--ripple-btn-shadow, none);
+}
+.ripple-preset-custom .ripple-btn:hover,
+.ripple-preset-custom .ripple-fab-option:hover {
+    background-color: var(--ripple-inline-hover-bg, #555);
+    color: var(--ripple-inline-hover-text, #fff);
+}
+
+/* --- Accessibility --- */
+.ripple-btn:focus-visible,
+.ripple-trigger:focus-visible,
+.ripple-fab-trigger:focus-visible,
+.ripple-fab-option:focus-visible {
+    outline: 2px solid #0073aa;
+    outline-offset: 2px;
+}
+
+/* =============================================
+   MODE: INLINE (default)
+   ============================================= */
+
+/* Nothing extra needed — uses base styles */
+
+/* =============================================
+   MODE: COLLAPSIBLE
+   ============================================= */
+
+.ripple-mode-collapsible {
+    position: relative;
+    display: inline-block;
+}
+
+/* Trigger button */
+.ripple-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.ripple-preset-custom .ripple-trigger {
+    background: var(--ripple-collapsible-trigger-bg, #333);
+    color: var(--ripple-collapsible-trigger-text, #fff);
+}
+
+.ripple-style-circle .ripple-trigger {
+    border-radius: 999px;
+}
+.ripple-style-rounded .ripple-trigger {
+    border-radius: var(--ripple-btn-radius, 8px);
+}
+.ripple-style-square .ripple-trigger {
+    border-radius: 0;
+}
+
+.ripple-trigger:hover {
+    background: #555;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.ripple-preset-custom .ripple-trigger:hover {
+    background: var(--ripple-collapsible-trigger-hover, #555);
+}
+
+.ripple-trigger:active {
+    transform: scale(0.97);
+}
+
+.ripple-trigger-icon {
+    display: flex;
+    width: 18px;
+    height: 18px;
+}
+
+.ripple-trigger-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+.ripple-trigger-label {
+    line-height: 1;
+}
+
+.ripple-trigger-arrow {
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.ripple-trigger-arrow svg {
+    fill: currentColor;
+}
+
+.ripple-open .ripple-trigger-arrow {
+    transform: rotate(180deg);
+}
+
+/* Collapsible panel */
+.ripple-collapsible-panel {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease,
+                margin 0.25s ease;
+    margin-top: 0;
+}
+
+.ripple-open .ripple-collapsible-panel {
+    max-height: 500px;
+    opacity: 1;
+    margin-top: 10px;
+}
+
+.ripple-preset-custom .ripple-collapsible-panel {
+    background: var(--ripple-collapsible-panel-bg, #f9f9f9);
+}
+
+/* Inside the panel, show labels and stack vertically */
+.ripple-mode-collapsible .ripple-collapsible-panel .ripple-buttons-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+}
+
+.ripple-mode-collapsible .ripple-collapsible-panel .ripple-btn {
+    width: 100%;
+    height: auto;
+    padding: 10px 16px;
+    justify-content: flex-start;
+    gap: 10px;
+    border-radius: 8px;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.ripple-mode-collapsible .ripple-collapsible-panel .ripple-btn .ripple-icon {
+    flex-shrink: 0;
+}
+
+.ripple-mode-collapsible .ripple-collapsible-panel .ripple-btn .ripple-label {
+    margin-left: 0;
+    font-size: 0.85em;
+}
+
+/* =============================================
+   MODE: FLOATING FAB
+   ============================================= */
+
+.ripple-floating-wrap {
+    position: fixed;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+/* --- Floating positions --- */
+.ripple-float-bottom-right  { bottom: 24px; right: 24px; flex-direction: row; }
+.ripple-float-top-right     { top: 24px; right: 24px; flex-direction: row; }
+.ripple-float-middle-right  { top: 50%; right: 24px; transform: translateY(-50%); flex-direction: row; }
+
+.ripple-float-bottom-left   { bottom: 24px; left: 24px; flex-direction: row-reverse; }
+.ripple-float-top-left      { top: 24px; left: 24px; flex-direction: row-reverse; }
+.ripple-float-middle-left   { top: 50%; left: 24px; transform: translateY(-50%); flex-direction: row-reverse; }
+
+.ripple-float-bottom-right .ripple-floating-options,
+.ripple-float-top-right .ripple-floating-options,
+.ripple-float-middle-right .ripple-floating-options {
+    flex-direction: row;
+    padding-right: 12px;
+    padding-bottom: 0;
+}
+
+.ripple-float-bottom-left .ripple-floating-options,
+.ripple-float-top-left .ripple-floating-options,
+.ripple-float-middle-left .ripple-floating-options {
+    flex-direction: row;
+    padding-left: 12px;
+    padding-bottom: 0;
+}
+
+/* Main FAB trigger */
+.ripple-fab-trigger {
+    width: var(--ripple-fab-size, 56px);
+    height: var(--ripple-fab-size, 56px);
+    border-radius: 50%;
+    background: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    position: relative;
+    z-index: 2;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ripple-preset-custom .ripple-fab-trigger {
+    background: var(--ripple-floating-trigger-bg, #333);
+}
+
+.ripple-fab-trigger:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+}
+
+.ripple-fab-trigger:active {
+    transform: scale(0.95);
+}
+
+.ripple-fab-icon-share,
+.ripple-fab-icon-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    transition: opacity 0.2s ease, transform 0.3s ease;
+}
+
+.ripple-fab-icon-share svg,
+.ripple-fab-icon-close svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+.ripple-fab-icon-close {
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+.ripple-fab-open .ripple-fab-icon-share {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+.ripple-fab-open .ripple-fab-icon-close {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+/* Floating options container */
+.ripple-floating-options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.ripple-fab-open .ripple-floating-options {
+    pointer-events: auto;
+}
+
+/* Individual FAB options */
+.ripple-fab-option {
+    width: var(--ripple-btn-size, 40px);
+    height: var(--ripple-btn-size, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: scale(0.3) translateX(20px);
+    transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s ease;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ripple-fab-option .ripple-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--ripple-icon-size, 20px);
+    height: var(--ripple-icon-size, 20px);
+}
+
+.ripple-fab-option .ripple-icon svg {
+    fill: currentColor;
+}
+
+.ripple-fab-open .ripple-fab-option {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+}
+
+.ripple-float-bottom-left .ripple-fab-option,
+.ripple-float-top-left .ripple-fab-option,
+.ripple-float-middle-left .ripple-fab-option {
+    transform: scale(0.3) translateX(-20px);
+}
+
+.ripple-float-bottom-left.ripple-fab-open .ripple-fab-option,
+.ripple-float-top-left.ripple-fab-open .ripple-fab-option,
+.ripple-float-middle-left.ripple-fab-open .ripple-fab-option {
+    transform: scale(1) translateX(0);
+}
+
+.ripple-fab-open .ripple-fab-option {
+    transition-delay: calc(var(--ripple-fab-index, 0) * 0.04s);
+}
+
+.ripple-fab-option:active {
+    transform: scale(0.95) !important;
+}
+
+/* Tooltip on hover (desktop) — appears above icons */
+.ripple-fab-tooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.ripple-fab-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+}
+
+.ripple-float-top-right .ripple-fab-tooltip,
+.ripple-float-top-left .ripple-fab-tooltip {
+    bottom: auto;
+    top: calc(100% + 10px);
+}
+
+.ripple-float-top-right .ripple-fab-tooltip::after,
+.ripple-float-top-left .ripple-fab-tooltip::after {
+    top: auto;
+    bottom: 100%;
+    border-top-color: transparent;
+    border-bottom-color: #333;
+}
+
+.ripple-fab-option:hover .ripple-fab-tooltip {
+    opacity: 1;
+}
+
+/* Backdrop (mobile) */
+.ripple-fab-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 99998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
+.ripple-fab-backdrop-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* =============================================
+   MOBILE RESPONSIVE
+   ============================================= */
+
+@media (max-width: 600px) {
+    .ripple-mode-inline.ripple-with-labels .ripple-label {
+        display: none;
+    }
+    .ripple-mode-inline.ripple-with-labels .ripple-btn {
+        width: var(--ripple-btn-size, 40px);
+        padding: 0;
+    }
+
+    .ripple-mode-inline .ripple-buttons-wrap {
+        gap: 6px;
+    }
+
+    .ripple-mode-collapsible {
+        display: block;
+    }
+    .ripple-trigger {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .ripple-float-bottom-right  { bottom: 16px; right: 16px; }
+    .ripple-float-bottom-left   { bottom: 16px; left: 16px; }
+    .ripple-float-top-right     { top: 16px; right: 16px; }
+    .ripple-float-top-left      { top: 16px; left: 16px; }
+    .ripple-float-middle-right  { right: 16px; }
+    .ripple-float-middle-left   { left: 16px; }
+
+    .ripple-fab-tooltip {
+        display: none;
+    }
+
+    .ripple-fab-trigger {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media (pointer: coarse) {
+    .ripple-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .ripple-fab-option {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .ripple-fab-tooltip {
+        display: none;
+    }
+
+    .ripple-mode-collapsible .ripple-collapsible-panel .ripple-btn {
+        padding: 12px 16px;
+    }
+}
+
+/* =============================================
+   DIVI COMPATIBILITY
+   ============================================= */
+
+.et_pb_post .ripple-share-buttons,
+.et_pb_module .ripple-share-buttons {
+    margin: 1.5em 0;
+}
+
+.et_pb_post .ripple-btn,
+.et_pb_module .ripple-btn {
+    text-decoration: none !important;
+}
+
+.et_pb_post .ripple-trigger,
+.et_pb_module .ripple-trigger {
+    text-decoration: none !important;
+}
