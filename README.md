@@ -1,4 +1,4 @@
-# Ripple — Smart Social Share Buttons
+# Webworq Social Share Buttons
 
 Smart social share buttons for WordPress with Open Graph & Twitter Card metadata for rich link previews. Built by [Webworq](https://webworq.dk).
 
@@ -14,7 +14,7 @@ Smart social share buttons for WordPress with Open Graph & Twitter Card metadata
 - 3 button shapes (circle, rounded, square) with custom border radius
 - Floating share button with 6 screen positions and mobile toggle
 - Per-variant custom colors for inline, collapsible, and floating modes
-- Auto-placement (before/after/both) or manual `[ripple_share]` shortcode
+- Auto-placement (before/after/both) or manual `[webworq_share]` shortcode
 - Icons from the [Automattic social-logos](https://github.com/Automattic/social-logos) icon set
 - Fully extensible via WordPress filters
 
@@ -28,23 +28,23 @@ Smart social share buttons for WordPress with Open Graph & Twitter Card metadata
 1. Download the latest release zip
 2. In WordPress, go to **Plugins → Add New → Upload Plugin**
 3. Upload the zip and activate
-4. Configure at **Settings → Ripple**
+4. Configure at **Settings → Webworq Social Share**
 
 ## Shortcode
 
-Use `[ripple_share]` in any post, page, widget, or page builder code module.
+Use `[webworq_share]` in any post, page, widget, or page builder code module.
 
 Optional attributes:
 ```
-[ripple_share platforms="linkedin,x,bluesky" style="rounded" size="large" mode="inline"]
+[webworq_share platforms="linkedin,x,bluesky" style="rounded" size="large" mode="inline"]
 ```
 
 ## Extending
 
-Add custom platforms with the `ripple_platforms` filter:
+Add custom platforms with the `webworq_ss_platforms` filter:
 
 ```php
-add_filter( 'ripple_platforms', function( $platforms ) {
+add_filter( 'webworq_ss_platforms', function( $platforms ) {
     $platforms['mastodon'] = array(
         'label'     => 'Mastodon',
         'icon'      => '<svg>...</svg>',

@@ -7,11 +7,11 @@
     $(document).ready(function() {
 
         // --- Sortable platform list ---
-        var $list = $('#ripple-platform-list');
+        var $list = $('#webworq-ss-platform-list');
         if ($list.length) {
             $list.sortable({
-                handle: '.ripple-drag-handle',
-                placeholder: 'ripple-sortable-placeholder',
+                handle: '.webworq-ss-drag-handle',
+                placeholder: 'webworq-ss-sortable-placeholder',
                 update: function() {
                     updatePlatformOrder();
                 }
@@ -21,124 +21,124 @@
 
         function updatePlatformOrder() {
             var order = [];
-            $list.find('.ripple-platform-item').each(function() {
+            $list.find('.webworq-ss-platform-item').each(function() {
                 order.push($(this).data('slug'));
             });
-            $('#ripple-platform-order').val(order.join(','));
+            $('#webworq-ss-platform-order').val(order.join(','));
         }
 
         // --- Placement toggle: hide post types when manual only ---
-        $('#ripple-auto-placement').on('change', function() {
+        $('#webworq-ss-auto-placement').on('change', function() {
             if ($(this).val() === 'none') {
-                $('.ripple-post-types-row').hide();
+                $('.webworq-ss-post-types-row').hide();
             } else {
-                $('.ripple-post-types-row').show();
+                $('.webworq-ss-post-types-row').show();
             }
         });
 
         // --- Floating enable toggle: show/hide floating settings ---
-        $('#ripple-floating-enabled').on('change', function() {
+        $('#webworq-ss-floating-enabled').on('change', function() {
             if ($(this).is(':checked')) {
-                $('.ripple-floating-settings').show();
+                $('.webworq-ss-floating-settings').show();
             } else {
-                $('.ripple-floating-settings').hide();
+                $('.webworq-ss-floating-settings').hide();
             }
         });
 
         // --- Floating position picker ---
-        $('.ripple-position-cell input[type="radio"]').on('change', function() {
-            $('.ripple-position-cell').removeClass('ripple-position-active');
-            $(this).closest('.ripple-position-cell').addClass('ripple-position-active');
+        $('.webworq-ss-position-cell input[type="radio"]').on('change', function() {
+            $('.webworq-ss-position-cell').removeClass('webworq-ss-position-active');
+            $(this).closest('.webworq-ss-position-cell').addClass('webworq-ss-position-active');
         });
 
         // --- Color mode toggle ---
-        $('#ripple-color-mode').on('change', function() {
+        $('#webworq-ss-color-mode').on('change', function() {
             if ($(this).val() === 'custom') {
-                $('.ripple-custom-colors').show();
+                $('.webworq-ss-custom-colors').show();
             } else {
-                $('.ripple-custom-colors').hide();
+                $('.webworq-ss-custom-colors').hide();
             }
         });
 
         // --- Color picker ---
-        $('.ripple-color-field').wpColorPicker();
+        $('.webworq-ss-color-field').wpColorPicker();
 
         // --- Display mode card selection ---
-        $('.ripple-mode-card input[type="radio"]').on('change', function() {
-            $('.ripple-mode-card').removeClass('ripple-mode-card-active');
-            $(this).closest('.ripple-mode-card').addClass('ripple-mode-card-active');
+        $('.webworq-ss-mode-card input[type="radio"]').on('change', function() {
+            $('.webworq-ss-mode-card').removeClass('webworq-ss-mode-card-active');
+            $(this).closest('.webworq-ss-mode-card').addClass('webworq-ss-mode-card-active');
         });
 
         // --- Shape picker selection ---
-        $('.ripple-shape-option input[type="radio"]').on('change', function() {
-            $('.ripple-shape-option').removeClass('selected');
-            $(this).closest('.ripple-shape-option').addClass('selected');
+        $('.webworq-ss-shape-option input[type="radio"]').on('change', function() {
+            $('.webworq-ss-shape-option').removeClass('selected');
+            $(this).closest('.webworq-ss-shape-option').addClass('selected');
         });
 
         // --- Border radius type toggle ---
-        $('.ripple-radius-toggle').on('change', function() {
-            var type = $('input[name="ripple_settings[border_radius_type]"]:checked').val();
+        $('.webworq-ss-radius-toggle').on('change', function() {
+            var type = $('input[name="webworq_ss_settings[border_radius_type]"]:checked').val();
             if (type === 'custom') {
-                $('.ripple-custom-radius-input').show();
+                $('.webworq-ss-custom-radius-input').show();
             } else {
-                $('.ripple-custom-radius-input').hide();
+                $('.webworq-ss-custom-radius-input').hide();
             }
         });
 
         // --- Range slider value sync ---
-        $('.ripple-range-slider').on('input', function() {
+        $('.webworq-ss-range-slider').on('input', function() {
             var val = $(this).val();
-            $(this).next('.ripple-range-value').text(val + 'px');
+            $(this).next('.webworq-ss-range-value').text(val + 'px');
         });
 
         // --- Color preset card selection ---
-        $('.ripple-preset-card input[type="radio"]').on('change', function() {
+        $('.webworq-ss-preset-card input[type="radio"]').on('change', function() {
             var preset = $(this).val();
-            $('.ripple-preset-card').removeClass('ripple-preset-active');
-            $(this).closest('.ripple-preset-card').addClass('ripple-preset-active');
+            $('.webworq-ss-preset-card').removeClass('webworq-ss-preset-active');
+            $(this).closest('.webworq-ss-preset-card').addClass('webworq-ss-preset-active');
 
             // Show/hide per-variant color pickers when custom is selected
             if (preset === 'custom') {
-                $('.ripple-color-subtabs-wrapper').show();
+                $('.webworq-ss-color-subtabs-wrapper').show();
             } else {
-                $('.ripple-color-subtabs-wrapper').hide();
+                $('.webworq-ss-color-subtabs-wrapper').hide();
             }
         });
 
         // --- Color subtab switching ---
-        $('.ripple-color-subtab').on('click', function(e) {
+        $('.webworq-ss-color-subtab').on('click', function(e) {
             e.preventDefault();
             var variant = $(this).data('variant');
 
             // Remove active class from all subtabs
-            $('.ripple-color-subtab').removeClass('active');
+            $('.webworq-ss-color-subtab').removeClass('active');
             $(this).addClass('active');
 
             // Hide all color panels
-            $('.ripple-color-panel').removeClass('active').hide();
+            $('.webworq-ss-color-panel').removeClass('active').hide();
 
             // Show selected panel
-            $('.ripple-color-panel-' + variant).addClass('active').show();
+            $('.webworq-ss-color-panel-' + variant).addClass('active').show();
         });
 
         // Initialize border radius toggle state
-        var radiusType = $('input[name="ripple_settings[border_radius_type]"]:checked').val();
+        var radiusType = $('input[name="webworq_ss_settings[border_radius_type]"]:checked').val();
         if (radiusType === 'custom') {
-            $('.ripple-custom-radius-input').show();
+            $('.webworq-ss-custom-radius-input').show();
         } else {
-            $('.ripple-custom-radius-input').hide();
+            $('.webworq-ss-custom-radius-input').hide();
         }
 
         // Initialize preset state
-        var preset = $('input[name="ripple_settings[color_preset]"]:checked').val();
+        var preset = $('input[name="webworq_ss_settings[color_preset]"]:checked').val();
         if (preset === 'custom') {
-            $('.ripple-color-subtabs-wrapper').show();
+            $('.webworq-ss-color-subtabs-wrapper').show();
         } else {
-            $('.ripple-color-subtabs-wrapper').hide();
+            $('.webworq-ss-color-subtabs-wrapper').hide();
         }
 
         // --- Media uploader for fallback image ---
-        $('#ripple-upload-image').on('click', function(e) {
+        $('#webworq-ss-upload-image').on('click', function(e) {
             e.preventDefault();
 
             var frame = wp.media({
@@ -150,7 +150,7 @@
 
             frame.on('select', function() {
                 var attachment = frame.state().get('selection').first().toJSON();
-                $('#ripple-default-image').val(attachment.url);
+                $('#webworq-ss-default-image').val(attachment.url);
             });
 
             frame.open();

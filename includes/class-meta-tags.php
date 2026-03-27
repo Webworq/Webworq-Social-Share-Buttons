@@ -7,14 +7,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * These tags are used by LinkedIn, X/Twitter, Bluesky, Facebook, and
  * most other platforms when generating link previews.
  */
-class Ripple_Meta_Tags {
+class Webworq_SS_Meta_Tags {
 
     public function __construct() {
         add_action( 'wp_head', array( $this, 'output_meta_tags' ), 1 );
     }
 
     public function output_meta_tags() {
-        if ( ! Ripple_Social_Share::get_setting( 'inject_og', true ) ) return;
+        if ( ! Webworq_Social_Share::get_setting( 'inject_og', true ) ) return;
         if ( ! is_singular() ) return;
 
         // Check if common SEO plugins are active - skip if they handle OG
@@ -29,7 +29,7 @@ class Ripple_Meta_Tags {
         $type         = ( is_front_page() || is_home() ) ? 'website' : 'article';
         $locale       = get_locale();
 
-        echo "\n<!-- Ripple - Open Graph & Twitter Card -->\n";
+        echo "\n<!-- Webworq Social Share - Open Graph & Twitter Card -->\n";
 
         // Open Graph
         $this->meta_tag( 'og:type', $type );
@@ -64,12 +64,12 @@ class Ripple_Meta_Tags {
             echo '<meta name="twitter:image" content="' . esc_url( $image ) . '" />' . "\n";
         }
 
-        $handle = Ripple_Social_Share::get_setting( 'twitter_handle', '' );
+        $handle = Webworq_Social_Share::get_setting( 'twitter_handle', '' );
         if ( $handle ) {
             echo '<meta name="twitter:site" content="@' . esc_attr( $handle ) . '" />' . "\n";
         }
 
-        echo "<!-- / Ripple -->\n\n";
+        echo "<!-- / Webworq Social Share -->\n\n";
     }
 
     /**
@@ -104,7 +104,7 @@ class Ripple_Meta_Tags {
         }
 
         // Third: fallback image from settings
-        $default = Ripple_Social_Share::get_setting( 'default_image', '' );
+        $default = Webworq_Social_Share::get_setting( 'default_image', '' );
         if ( $default ) return $default;
 
         // Fourth: site icon
@@ -140,8 +140,8 @@ class Ripple_Meta_Tags {
         /**
          * Filter to indicate an SEO plugin handles OG tags.
          */
-        return apply_filters( 'ripple_seo_plugin_active', false );
+        return apply_filters( 'webworq_ss_seo_plugin_active', false );
     }
 }
 
-new Ripple_Meta_Tags();
+new Webworq_SS_Meta_Tags();
