@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Webworq Social Share Buttons
- * Plugin URI: https://github.com/Webworq/Ripple---Smart-Social-Share-Buttons
+ * Plugin URI: https://github.com/Webworq/Webworq-Social-Share-Buttons
  * Description: Smart social share buttons with Open Graph & Twitter Card metadata for rich link previews. Built by Webworq.
  * Version: 4.0.0
  * Author: Webworq
