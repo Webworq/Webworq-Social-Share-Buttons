@@ -3,7 +3,7 @@
  * Plugin Name: Webworq Social Share Buttons
  * Plugin URI: https://github.com/Webworq/Webworq-Social-Share-Buttons
  * Description: Smart social share buttons with Open Graph & Twitter Card metadata for rich link previews. Built by Webworq.
- * Version: 4.0.0
+ * Version: 4.0.1
  * Author: Webworq
  * Author URI: https://webworq.dk
  * License: GPL v2 or later
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'WEBWORQ_SS_VERSION', '4.0.0' );
+define( 'WEBWORQ_SS_VERSION', '4.0.1' );
 define( 'WEBWORQ_SS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WEBWORQ_SS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WEBWORQ_SS_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
