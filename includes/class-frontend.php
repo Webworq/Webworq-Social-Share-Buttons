@@ -6,12 +6,11 @@ class Webworq_SS_Frontend {
     private $floating_rendered = false;
 
     public function __construct() {
-        add_shortcode( 'ripple_share', array( $this, 'shortcode' ) );
-        add_shortcode( 'webworq_share', array( $this, 'shortcode' ) ); // backward compat
+        add_shortcode( 'webworq_share', array( $this, 'shortcode' ) );
         add_filter( 'the_content', array( $this, 'auto_insert' ), 99 );
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
         add_action( 'wp_footer', array( $this, 'render_floating' ), 50 );
-        add_action( 'wp_footer', array( $this, 'footer_scripts' ), 99 );
+        // JS is now added via wp_add_inline_script in enqueue_assets()
     }
 
     public function enqueue_assets() {
@@ -21,6 +20,9 @@ class Webworq_SS_Frontend {
         }
 
         wp_enqueue_style( 'webworq-ss-frontend', WEBWORQ_SS_PLUGIN_URL . 'assets/css/frontend.css', array(), WEBWORQ_SS_VERSION );
+        wp_register_script( 'webworq-ss-frontend', false, array(), WEBWORQ_SS_VERSION, true );
+        wp_enqueue_script( 'webworq-ss-frontend' );
+        wp_add_inline_script( 'webworq-ss-frontend', $this->get_frontend_js() );
 
         $settings = Webworq_Social_Share::get_settings();
         $custom_css = $this->build_dynamic_css( $settings );
@@ -35,7 +37,7 @@ class Webworq_SS_Frontend {
 
     private function has_shortcode_in_content() {
         global $post;
-        return $post && ( has_shortcode( $post->post_content, 'ripple_share' ) || has_shortcode( $post->post_content, 'webworq_share' ) );
+        return $post && has_shortcode( $post->post_content, 'webworq_share' );
     }
 
     public function auto_insert( $content ) {
@@ -47,7 +49,7 @@ class Webworq_SS_Frontend {
         // Manual mode doesn't insert into content
         if ( $placement === 'none' ) return $content;
 
-        $buttons = $this->render_buttons();
+        $buttons = webworq_ss_kses_output( $this->render_buttons() );
 
         switch ( $placement ) {
             case 'before':
@@ -68,7 +70,8 @@ class Webworq_SS_Frontend {
             'mode'      => '',  // override display mode per shortcode
         ), $atts, 'webworq_share' );
 
-        return $this->render_buttons( $atts );
+        $output = $this->render_buttons( $atts );
+        return webworq_ss_kses_output( $output );
     }
 
     /**
@@ -91,7 +94,7 @@ class Webworq_SS_Frontend {
         if ( ! $this->should_display_floating() ) return;
 
         $this->floating_rendered = true;
-        echo $this->render_buttons( array( 'mode' => 'floating' ) );
+        echo webworq_ss_kses_output( $this->render_buttons( array( 'mode' => 'floating' ) ) );
     }
 
     /**
@@ -164,7 +167,7 @@ class Webworq_SS_Frontend {
         $label_text = $is_copy ? $platform['label'] : sprintf( __( 'Share on %s', 'webworq-social-share' ), $platform['label'] );
         $html .= ' title="' . esc_attr( $label_text ) . '"';
         $html .= ' aria-label="' . esc_attr( $label_text ) . '">';
-        $html .= '<span class="webworq-ss-icon">' . $platform['icon'] . '</span>';
+        $html .= '<span class="webworq-ss-icon">' . webworq_ss_kses_icon( $platform['icon'] ) . '</span>';
 
         if ( $show_labels ) {
             $html .= '<span class="webworq-ss-label">' . esc_html( $platform['label'] ) . '</span>';
@@ -306,7 +309,7 @@ class Webworq_SS_Frontend {
                        style="<?php echo esc_attr( $style_attr ); ?>"
                        title="<?php echo esc_attr( $label ); ?>"
                        aria-label="<?php echo esc_attr( $label ); ?>">
-                        <span class="webworq-ss-icon"><?php echo $platform['icon']; ?></span>
+                        <span class="webworq-ss-icon"><?php echo webworq_ss_kses_icon( $platform['icon'] ); ?></span>
                         <span class="webworq-ss-fab-tooltip"><?php echo esc_html( $platform['label'] ); ?></span>
                     </a>
                     <?php
@@ -406,152 +409,155 @@ class Webworq_SS_Frontend {
     }
 
     /**
-     * All JS for collapsible, floating, and copy-link.
+     * Return the frontend JS code for collapsible, floating, and copy-link.
      */
-    public function footer_scripts() {
-        $is_floating = ! empty( Webworq_Social_Share::get_setting( 'floating_enabled' ) ) && $this->should_display_floating();
-        if ( ! $this->should_display() && ! $this->has_shortcode_in_content() && ! $is_floating ) return;
-        ?>
-        <script>
-        (function(){
-            /* --- Copy to clipboard --- */
-            function copyToClipboard(text) {
-                if (navigator.clipboard && window.isSecureContext) {
-                    return navigator.clipboard.writeText(text);
-                }
-                var ta = document.createElement('textarea');
-                ta.value = text;
-                ta.style.position = 'fixed';
-                ta.style.left = '-9999px';
-                ta.style.top = '-9999px';
-                document.body.appendChild(ta);
-                ta.focus();
-                ta.select();
-                return new Promise(function(resolve, reject) {
-                    document.execCommand('copy') ? resolve() : reject();
-                    document.body.removeChild(ta);
-                });
+    private function get_frontend_js() {
+        return <<<'JS'
+(function(){
+    function init(){
+    /* --- Copy to clipboard --- */
+    function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text);
+        }
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        ta.style.top = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        return new Promise(function(resolve, reject) {
+            document.execCommand('copy') ? resolve() : reject();
+            document.body.removeChild(ta);
+        });
+    }
+
+    function showCopySuccess(btn) {
+        var icon = btn.querySelector('.webworq-ss-icon');
+        if (icon) {
+            var orig = icon.innerHTML;
+            icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+            setTimeout(function(){ icon.innerHTML = orig; }, 2000);
+        }
+    }
+
+    /* --- Collapsible mode --- */
+    document.querySelectorAll('.webworq-ss-mode-collapsible .webworq-ss-trigger').forEach(function(trigger) {
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            var parent = this.closest('.webworq-ss-mode-collapsible');
+            var panel = parent.querySelector('.webworq-ss-collapsible-panel');
+            var isOpen = parent.classList.contains('webworq-ss-open');
+
+            if (isOpen) {
+                parent.classList.remove('webworq-ss-open');
+                this.setAttribute('aria-expanded', 'false');
+                panel.setAttribute('aria-hidden', 'true');
+            } else {
+                parent.classList.add('webworq-ss-open');
+                this.setAttribute('aria-expanded', 'true');
+                panel.setAttribute('aria-hidden', 'false');
             }
+        });
+    });
 
-            function showCopySuccess(btn) {
-                var icon = btn.querySelector('.webworq-ss-icon');
-                if (icon) {
-                    var orig = icon.innerHTML;
-                    icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
-                    setTimeout(function(){ icon.innerHTML = orig; }, 2000);
-                }
+    /* --- Floating FAB mode --- */
+    document.querySelectorAll('.webworq-ss-fab-trigger').forEach(function(trigger) {
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var wrap = this.closest('.webworq-ss-floating-wrap');
+            var opts = wrap.querySelector('.webworq-ss-floating-options');
+            var backdrop = wrap.nextElementSibling;
+            var isOpen = wrap.classList.contains('webworq-ss-fab-open');
+
+            if (isOpen) {
+                closeFab(wrap);
+            } else {
+                wrap.classList.add('webworq-ss-fab-open');
+                this.setAttribute('aria-expanded', 'true');
+                opts.setAttribute('aria-hidden', 'false');
+                if (backdrop) backdrop.classList.add('webworq-ss-fab-backdrop-visible');
             }
+        });
+    });
 
-            /* --- Collapsible mode --- */
-            document.querySelectorAll('.webworq-ss-mode-collapsible .webworq-ss-trigger').forEach(function(trigger) {
-                trigger.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    var parent = this.closest('.webworq-ss-mode-collapsible');
-                    var panel = parent.querySelector('.webworq-ss-collapsible-panel');
-                    var isOpen = parent.classList.contains('webworq-ss-open');
-
-                    if (isOpen) {
-                        parent.classList.remove('webworq-ss-open');
-                        this.setAttribute('aria-expanded', 'false');
-                        panel.setAttribute('aria-hidden', 'true');
-                    } else {
-                        parent.classList.add('webworq-ss-open');
-                        this.setAttribute('aria-expanded', 'true');
-                        panel.setAttribute('aria-hidden', 'false');
-                    }
-                });
-            });
-
-            /* --- Floating FAB mode --- */
-            document.querySelectorAll('.webworq-ss-fab-trigger').forEach(function(trigger) {
-                trigger.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    var wrap = this.closest('.webworq-ss-floating-wrap');
-                    var opts = wrap.querySelector('.webworq-ss-floating-options');
-                    var backdrop = wrap.nextElementSibling;
-                    var isOpen = wrap.classList.contains('webworq-ss-fab-open');
-
-                    if (isOpen) {
-                        closeFab(wrap);
-                    } else {
-                        wrap.classList.add('webworq-ss-fab-open');
-                        this.setAttribute('aria-expanded', 'true');
-                        opts.setAttribute('aria-hidden', 'false');
-                        if (backdrop) backdrop.classList.add('webworq-ss-fab-backdrop-visible');
-                    }
-                });
-            });
-
-            // Close FAB on backdrop tap
-            document.querySelectorAll('.webworq-ss-fab-backdrop').forEach(function(bd) {
-                bd.addEventListener('click', function() {
-                    var wrap = this.previousElementSibling;
-                    if (wrap && wrap.classList.contains('webworq-ss-fab-open')) {
-                        closeFab(wrap);
-                    }
-                });
-            });
-
-            // Close FAB on Escape
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    document.querySelectorAll('.webworq-ss-floating-wrap.webworq-ss-fab-open').forEach(function(wrap) {
-                        closeFab(wrap);
-                    });
-                    document.querySelectorAll('.webworq-ss-mode-collapsible.webworq-ss-open').forEach(function(c) {
-                        c.classList.remove('webworq-ss-open');
-                        c.querySelector('.webworq-ss-trigger').setAttribute('aria-expanded', 'false');
-                        c.querySelector('.webworq-ss-collapsible-panel').setAttribute('aria-hidden', 'true');
-                    });
-                }
-            });
-
-            function closeFab(wrap) {
-                wrap.classList.remove('webworq-ss-fab-open');
-                var trigger = wrap.querySelector('.webworq-ss-fab-trigger');
-                var opts = wrap.querySelector('.webworq-ss-floating-options');
-                var backdrop = wrap.nextElementSibling;
-                if (trigger) trigger.setAttribute('aria-expanded', 'false');
-                if (opts) opts.setAttribute('aria-hidden', 'true');
-                if (backdrop) backdrop.classList.remove('webworq-ss-fab-backdrop-visible');
+    // Close FAB on backdrop tap
+    document.querySelectorAll('.webworq-ss-fab-backdrop').forEach(function(bd) {
+        bd.addEventListener('click', function() {
+            var wrap = this.previousElementSibling;
+            if (wrap && wrap.classList.contains('webworq-ss-fab-open')) {
+                closeFab(wrap);
             }
+        });
+    });
 
-            // Close FAB after clicking a share option
-            document.querySelectorAll('.webworq-ss-fab-option').forEach(function(opt) {
-                opt.addEventListener('click', function() {
-                    var wrap = this.closest('.webworq-ss-floating-wrap');
-                    if (wrap) {
-                        setTimeout(function(){ closeFab(wrap); }, 300);
-                    }
-                });
+    // Close FAB on Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.webworq-ss-floating-wrap.webworq-ss-fab-open').forEach(function(wrap) {
+                closeFab(wrap);
             });
+            document.querySelectorAll('.webworq-ss-mode-collapsible.webworq-ss-open').forEach(function(c) {
+                c.classList.remove('webworq-ss-open');
+                c.querySelector('.webworq-ss-trigger').setAttribute('aria-expanded', 'false');
+                c.querySelector('.webworq-ss-collapsible-panel').setAttribute('aria-hidden', 'true');
+            });
+        }
+    });
 
-            /* --- Copy link handler (works in all modes) --- */
-            document.addEventListener('click', function(e) {
-                var btn = e.target.closest('[data-copy-url]');
-                if (!btn) return;
-                e.preventDefault();
-                var url = btn.getAttribute('data-copy-url');
-                if (!url) return;
-                copyToClipboard(url).then(function() {
-                    showCopySuccess(btn);
-                }).catch(function() {});
-            });
+    function closeFab(wrap) {
+        wrap.classList.remove('webworq-ss-fab-open');
+        var trigger = wrap.querySelector('.webworq-ss-fab-trigger');
+        var opts = wrap.querySelector('.webworq-ss-floating-options');
+        var backdrop = wrap.nextElementSibling;
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        if (opts) opts.setAttribute('aria-hidden', 'true');
+        if (backdrop) backdrop.classList.remove('webworq-ss-fab-backdrop-visible');
+    }
 
-            /* --- Close collapsible when clicking outside --- */
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.webworq-ss-mode-collapsible')) {
-                    document.querySelectorAll('.webworq-ss-mode-collapsible.webworq-ss-open').forEach(function(c) {
-                        c.classList.remove('webworq-ss-open');
-                        c.querySelector('.webworq-ss-trigger').setAttribute('aria-expanded', 'false');
-                        c.querySelector('.webworq-ss-collapsible-panel').setAttribute('aria-hidden', 'true');
-                    });
-                }
+    // Close FAB after clicking a share option
+    document.querySelectorAll('.webworq-ss-fab-option').forEach(function(opt) {
+        opt.addEventListener('click', function() {
+            var wrap = this.closest('.webworq-ss-floating-wrap');
+            if (wrap) {
+                setTimeout(function(){ closeFab(wrap); }, 300);
+            }
+        });
+    });
+
+    /* --- Copy link handler (works in all modes) --- */
+    document.addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-copy-url]');
+        if (!btn) return;
+        e.preventDefault();
+        var url = btn.getAttribute('data-copy-url');
+        if (!url) return;
+        copyToClipboard(url).then(function() {
+            showCopySuccess(btn);
+        }).catch(function() {});
+    });
+
+    /* --- Close collapsible when clicking outside --- */
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.webworq-ss-mode-collapsible')) {
+            document.querySelectorAll('.webworq-ss-mode-collapsible.webworq-ss-open').forEach(function(c) {
+                c.classList.remove('webworq-ss-open');
+                c.querySelector('.webworq-ss-trigger').setAttribute('aria-expanded', 'false');
+                c.querySelector('.webworq-ss-collapsible-panel').setAttribute('aria-hidden', 'true');
             });
-        })();
-        </script>
-        <?php
+        }
+    });
+    } /* end init */
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+JS;
     }
 }
 
